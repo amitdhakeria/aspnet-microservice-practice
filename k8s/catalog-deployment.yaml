@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: catalog-api
+spec:
+  replicas: 1
+  selector:
+     matchlabels:
+        app: catalog-api
+  template:
+     metadata:
+        labels:
+           app: catalog-api
+     spec:
+        container:
+           - name: catalog-api
+             image: docker.io/amitdhaker/catalog-api:v1
+             ports: 
+              -containerPort: 80
+  

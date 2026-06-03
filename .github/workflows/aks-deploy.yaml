@@ -1,0 +1,77 @@
+name: catalog API pipeline
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+
+    codeql:
+        runs-on: ubuntu-latest
+        permissions:
+            actions: read
+            contents: read
+            security-events: write
+
+        steps:
+            - uses: actions/checkout@v4
+            - uses: github/codeql-action/init@v3
+              with:
+                 languages: csharp
+
+            - uses: github/codeql-action/autobuild@v3
+
+            - uses: github/codeql-action/analyze@v3
+    
+    build-deploy:
+        needs: codeql
+        runs-on: ubuntu-latest
+
+        steps:
+            
+            - uses: actions/checkout@v4
+
+            # Docker login
+
+            - name: Login DockerHub
+              uses: docker/login-action@v3
+              with: 
+                username: ${{ secrets.DOCKERHUB_USERNAME }}
+                password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+            # Build only Catalog api
+            
+            - name: Build image
+              run: |
+                 docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/catalog-api:${{ github.sha }} -f src/Services/Catalog/Catalog.API/Dockerfile
+                 docker tag {{ secrets.DOCKERHUB_USERNAME }}/catalog-api:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/catalog-api:latest
+
+            # Push the image
+            - name: Push image
+              run: |
+                 docker push ${{ secrets.DOCKERHUB_USERNAME }}/catalog-api:${{ github.sha }}
+                 docker push {{ secrets.DOCKERHUB_USERNAME }}/catalog-api:latest
+            
+            # Azure login
+            - name: Azure login
+              uses: azure/login@v2
+              with:
+                 creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+            - name: Set AKS context
+              uses: azure/aks-set-context@v4
+              with:
+                resource-group: ${{ env.AKS_RESOURCE_GROUP }}
+                cluster-name: ${{ env.AKS_CLUSTER_NAME }}
+
+            # Deploy
+            - name: Deploy to AKS
+              uses: Azure/k8s-deploy@v5
+              with:
+                manifests: |
+                  k8s/catalog-deployment.yaml
+                  k8s/catalog-service.yaml
+
+                images: |
+                   docker.io/${{ secrets.DOCKERHUB_USERNAME }}/catalog-api:${{ github.sha }}
