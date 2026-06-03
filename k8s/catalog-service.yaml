@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata: 
-   name: catalog-api-Service
+   name: catalog-api-service
 spec:
    type: LoadBalancer
    selector:
