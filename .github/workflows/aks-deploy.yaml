@@ -49,7 +49,7 @@ jobs:
             
             - name: Build image
               run: |
-                 docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/catalog-api:${{ github.sha }} -f src/Services/Catalog/Catalog.API/Dockerfile .
+                 docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/catalog-api:${{ github.sha }} -f src/Services/Catalog/Catalog.API/Dockerfile src
                  docker tag {{ secrets.DOCKERHUB_USERNAME }}/catalog-api:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/catalog-api:latest
 
             # Push the image
