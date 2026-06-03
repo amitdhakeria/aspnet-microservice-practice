@@ -58,7 +58,7 @@ jobs:
                  docker push ${{ secrets.DOCKERHUB_USERNAME }}/catalog-api:${{ github.sha }}
                  docker push ${{ secrets.DOCKERHUB_USERNAME }}/catalog-api:latest
             
-            # Azure login
+            # Azure login recorrected
             - name: Azure login
               uses: azure/login@v3
               with:
