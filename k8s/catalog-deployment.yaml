@@ -16,5 +16,5 @@ spec:
            - name: catalog-api
              image: docker.io/amitdhaker/catalog-api:v1
              ports: 
-              - containerPort: 80
+              - containerPort: 8080
   
