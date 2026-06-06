@@ -7,7 +7,7 @@ on:
 
 env:
     AKS_RESOURCE_GROUP: aks-rg
-    AKS_CLUSTER_NAME: aks-dev-cluster7
+    AKS_CLUSTER_NAME: aks-dev-cluster
     IMAGE_NAME: catalog-api            
 
 jobs:
