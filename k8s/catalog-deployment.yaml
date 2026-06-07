@@ -12,6 +12,15 @@ spec:
         labels:
            app: catalog-api
      spec:
+        initContainers:
+          - name: wait-for-postgres
+            image: busubox
+            command:
+               [
+                  "sh",
+                  "-c",
+                  "until nc -z postgres 5432; do echo waiting for db; sleep 2; done;"
+               ]
         imagePullSecrets:
            - name: docker-secret
         containers:
