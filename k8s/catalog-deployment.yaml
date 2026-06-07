@@ -12,9 +12,17 @@ spec:
         labels:
            app: catalog-api
      spec:
+        imagePullSecrets:
+           - name: docker-secret
         containers:
            - name: catalog-api
-             image: docker.io/amitdhaker/catalog-api:v1
+             image: docker.io/amitdhaker/catalog-api:latest
              ports: 
               - containerPort: 8080
+             env:
+               - name: ASPNETCORE_URLS
+                 value: "http://+:8080"
+               - name: ConnectionStrings__Database
+                 value: "Server=postgres;Port=5432;Database=CatalogDb;User Id=postgres;Password=postgres;Include Error Detail=true"
+
   

@@ -1,9 +1,10 @@
 name: catalog API pipeline
 
 on:
-    push:
-        branches:
-            - main
+    workflow_dispatch
+    # push:
+    #     branches:
+    #         - main
 
 env:
     AKS_RESOURCE_GROUP: aks-rg
