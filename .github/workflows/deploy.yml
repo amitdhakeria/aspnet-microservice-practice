@@ -29,7 +29,7 @@ jobs:
             # 3. Build & Push Image
             - name: Build & Push image
               run: |
-                 docker build -t ${{ secrets.DOCKER_USERNAME }}/catalog-api:latest
+                 docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/catalog-api:latest -f src/Services/Catalog/Catalog.API/Dockerfile src
                  docker push ${{ secrets.DOCKER_USERNAME }}/catalog-api:latest
 
             # 4. Login to azure
@@ -50,7 +50,7 @@ jobs:
             - name: Create the Docker Secret
               run: |
                 kubectl create secret docker-registry docker-secret \
-                   --docker-username=${{ secrets.DOCKER_USERNAME }} \
+                   --docker-username=${{ secrets.DOCKERHUB_USERNAME }} \
                    --docker-password=${{ secrets.DOCKERHUB_TOKEN }} \
                    --docker-email=apamitpal6@gmail.com \
                    --dry-run=client -o yaml | kubectl apply -f -
