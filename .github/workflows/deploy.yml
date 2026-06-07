@@ -30,7 +30,7 @@ jobs:
             - name: Build & Push image
               run: |
                  docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/catalog-api:latest -f src/Services/Catalog/Catalog.API/Dockerfile src
-                 docker push ${{ secrets.DOCKER_USERNAME }}/catalog-api:latest
+                 docker push ${{ secrets.DOCKERHUB_USERNAME }}/catalog-api:latest
 
             # 4. Login to azure
             - name: Login to Azure
